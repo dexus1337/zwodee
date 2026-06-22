@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <cstdint>
 
 // Forward declaration of SDL structures
 typedef uint32_t SDL_AudioDeviceID;
