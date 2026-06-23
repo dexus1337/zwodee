@@ -79,7 +79,7 @@ namespace zwodee
         /**
          * @brief Draws a portion of a texture (sprite sheet) to the screen.
          */
-        void draw_sprite(const texture& tex, int src_x, int src_y, int src_w, int src_h, float dest_x, float dest_y, float dest_w, float dest_h, bool flip_horizontal = false);
+        void draw_sprite(const texture& tex, int src_x, int src_y, int src_w, int src_h, float dest_x, float dest_y, float dest_w, float dest_h, bool flip_horizontal = false, bool flip_vertical = false);
 
         /**
          * @brief Gets the raw SDL_Renderer pointer.

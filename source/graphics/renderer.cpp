@@ -151,14 +151,17 @@ namespace zwodee
         SDL_RenderTexture(m_sdl_renderer, tex.get_raw_texture(), nullptr, &dest_rect);
     }
 
-    void renderer::draw_sprite(const texture& tex, int src_x, int src_y, int src_w, int src_h, float dest_x, float dest_y, float dest_w, float dest_h, bool flip_horizontal)
+    void renderer::draw_sprite(const texture& tex, int src_x, int src_y, int src_w, int src_h, float dest_x, float dest_y, float dest_w, float dest_h, bool flip_horizontal, bool flip_vertical)
     {
         SDL_FRect src_rect = { static_cast<float>(src_x), static_cast<float>(src_y), static_cast<float>(src_w), static_cast<float>(src_h) };
         SDL_FRect dest_rect = { dest_x, dest_y, dest_w, dest_h };
 
-        if (flip_horizontal)
+        if (flip_horizontal || flip_vertical)
         {
-            SDL_RenderTextureRotated(m_sdl_renderer, tex.get_raw_texture(), &src_rect, &dest_rect, 0.0, nullptr, SDL_FLIP_HORIZONTAL);
+            SDL_FlipMode flip = SDL_FLIP_NONE;
+            if (flip_horizontal) flip = static_cast<SDL_FlipMode>(flip | SDL_FLIP_HORIZONTAL);
+            if (flip_vertical) flip = static_cast<SDL_FlipMode>(flip | SDL_FLIP_VERTICAL);
+            SDL_RenderTextureRotated(m_sdl_renderer, tex.get_raw_texture(), &src_rect, &dest_rect, 0.0, nullptr, flip);
         }
         else
         {

@@ -31,6 +31,8 @@ namespace zwodee
         int src_w;
         int src_h;
         bool flip_horizontal = false;
+        bool flip_vertical = false;
+        uint8_t color_mod = 255;
     };
 
     using render_snapshot = std::vector<render_node>;

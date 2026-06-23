@@ -1,6 +1,7 @@
 #include "core/engine.hpp"
 #include "graphics/window.hpp"
 #include "graphics/renderer.hpp"
+#include "graphics/texture.hpp"
 #include "audio/audio-manager.hpp"
 #include "levels/level-manager.hpp"
 #include "core/input.hpp"
@@ -87,7 +88,9 @@ namespace zwodee
                 {
                     if (node.tex)
                     {
-                        m_renderer->draw_sprite(*node.tex, node.src_x, node.src_y, node.src_w, node.src_h, node.x, node.y, node.w, node.h, node.flip_horizontal);
+                        SDL_SetTextureColorMod(node.tex->get_raw_texture(), node.color_mod, node.color_mod, node.color_mod);
+                        m_renderer->draw_sprite(*node.tex, node.src_x, node.src_y, node.src_w, node.src_h, node.x, node.y, node.w, node.h, node.flip_horizontal, node.flip_vertical);
+                        SDL_SetTextureColorMod(node.tex->get_raw_texture(), 255, 255, 255);
                     }
                     else
                     {
