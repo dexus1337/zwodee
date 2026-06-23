@@ -30,6 +30,7 @@ namespace zwodee
         int src_y;
         int src_w;
         int src_h;
+        bool flip_horizontal = false;
     };
 
     using render_snapshot = std::vector<render_node>;

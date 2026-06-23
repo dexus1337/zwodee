@@ -88,6 +88,8 @@ namespace zwodee
             return nullptr;
         }
 
+        SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_LINEAR);
+
         return std::make_unique<texture>(tex, width, height);
     }
 
@@ -136,6 +138,7 @@ namespace zwodee
 
         // Set blend mode to enable transparency
         SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
+        SDL_SetTextureScaleMode(tex, SDL_SCALEMODE_LINEAR);
 
         return std::make_unique<texture>(tex, width, height);
     }
@@ -148,13 +151,19 @@ namespace zwodee
         SDL_RenderTexture(m_sdl_renderer, tex.get_raw_texture(), nullptr, &dest_rect);
     }
 
-    void renderer::draw_sprite(const texture& tex, int src_x, int src_y, int src_w, int src_h, float dest_x, float dest_y, float dest_w, float dest_h)
+    void renderer::draw_sprite(const texture& tex, int src_x, int src_y, int src_w, int src_h, float dest_x, float dest_y, float dest_w, float dest_h, bool flip_horizontal)
     {
         SDL_FRect src_rect = { static_cast<float>(src_x), static_cast<float>(src_y), static_cast<float>(src_w), static_cast<float>(src_h) };
         SDL_FRect dest_rect = { dest_x, dest_y, dest_w, dest_h };
 
-        // SDL3 uses SDL_RenderTexture
-        SDL_RenderTexture(m_sdl_renderer, tex.get_raw_texture(), &src_rect, &dest_rect);
+        if (flip_horizontal)
+        {
+            SDL_RenderTextureRotated(m_sdl_renderer, tex.get_raw_texture(), &src_rect, &dest_rect, 0.0, nullptr, SDL_FLIP_HORIZONTAL);
+        }
+        else
+        {
+            SDL_RenderTexture(m_sdl_renderer, tex.get_raw_texture(), &src_rect, &dest_rect);
+        }
     }
 
     SDL_Renderer* renderer::get_raw_renderer() const

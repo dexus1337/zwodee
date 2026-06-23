@@ -87,7 +87,7 @@ namespace zwodee
                 {
                     if (node.tex)
                     {
-                        m_renderer->draw_sprite(*node.tex, node.src_x, node.src_y, node.src_w, node.src_h, node.x, node.y, node.w, node.h);
+                        m_renderer->draw_sprite(*node.tex, node.src_x, node.src_y, node.src_w, node.src_h, node.x, node.y, node.w, node.h, node.flip_horizontal);
                     }
                     else
                     {

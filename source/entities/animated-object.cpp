@@ -35,14 +35,14 @@ namespace zwodee
         int src_x = (frame % m_sprite_cols) * frame_width;
         int src_y = 0; // Single row spritesheets
 
-        target_renderer.draw_sprite(*m_texture, src_x, src_y, frame_width, frame_height, render_x, render_y, m_width, m_height);
+        target_renderer.draw_sprite(*m_texture, src_x, src_y, frame_width, frame_height, render_x, render_y, m_width, m_height, m_flip_horizontal);
     }
 
     render_node animated_object::get_render_node() const
     {
         if (!m_texture)
         {
-            return render_node{ m_x, m_y, m_width, m_height, nullptr, 0, 0, 0, 0 };
+            return render_node{ m_x, m_y, m_width, m_height, nullptr, 0, 0, 0, 0, false };
         }
         int frame = m_animator.get_current_frame();
         int frame_width = m_texture->get_width() / m_sprite_cols;
@@ -51,7 +51,7 @@ namespace zwodee
         int src_x = (frame % m_sprite_cols) * frame_width;
         int src_y = 0;
 
-        return render_node{ m_x, m_y, m_width, m_height, m_texture, src_x, src_y, frame_width, frame_height };
+        return render_node{ m_x, m_y, m_width, m_height, m_texture, src_x, src_y, frame_width, frame_height, m_flip_horizontal };
     }
 
     void animated_object::configure_animator(int total_frames, int ticks_per_frame, bool loops)

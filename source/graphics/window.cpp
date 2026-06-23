@@ -44,7 +44,7 @@ namespace zwodee
     {
         int w = 0, h = 0;
         SDL_GetWindowSize(m_sdl_window, &w, &h);
-        float scale = static_cast<float>(h) / 600.0f;
+        float scale = static_cast<float>(w) / 1120.0f;
         if (scale < 1.0f) scale = 1.0f;
         return scale;
     }
