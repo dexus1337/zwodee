@@ -41,6 +41,7 @@ namespace zwodee
         void set_tile(uint32_t x, uint32_t y, uint16_t tile_id, uint8_t flags, const texture* tex);
         void add_entity(std::unique_ptr<entity> ent);
         void set_background_texture(const texture* tex);
+        void clear_level();
 
         // Getters
         [[nodiscard]] uint32_t get_width() const;

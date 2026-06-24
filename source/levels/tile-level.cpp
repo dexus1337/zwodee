@@ -19,6 +19,13 @@ namespace zwodee
         m_entities.clear();
     }
 
+    void tile_level::clear_level()
+    {
+        m_tiles.clear();
+        m_tiles.resize(m_width * m_height);
+        m_entities.clear();
+    }
+
     void tile_level::on_enter()
     {
     }
