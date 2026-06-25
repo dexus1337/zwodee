@@ -19,6 +19,7 @@ namespace zwodee
 { 
     class window; 
     class texture;
+    class font;
 
     /**
      * @class   renderer
@@ -80,6 +81,11 @@ namespace zwodee
          * @brief Draws a portion of a texture (sprite sheet) to the screen.
          */
         void draw_sprite(const texture& tex, int src_x, int src_y, int src_w, int src_h, float dest_x, float dest_y, float dest_w, float dest_h, bool flip_horizontal = false, bool flip_vertical = false);
+        
+        /**
+         * @brief Draws text onto the screen using a TrueType font, supporting scale and color modulation.
+         */
+        void draw_text(const font& f, const std::string& text, float x, float y, float scale = 1.0f, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255, uint8_t a = 255);
 
         /**
          * @brief Gets the raw SDL_Renderer pointer.

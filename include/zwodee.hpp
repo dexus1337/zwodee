@@ -15,6 +15,7 @@
 #include "graphics/texture.hpp"
 #include "graphics/render-snapshot.hpp"
 #include "graphics/renderer.hpp"
+#include "graphics/font.hpp"
 #include "entities/animator.hpp"
 #include "entities/game-object.hpp"
 #include "entities/textured-object.hpp"

@@ -86,6 +86,11 @@ namespace zwodee
 
     void audio_manager::play_sound(const std::string& name)
     {
+        if (m_muted)
+        {
+            return;
+        }
+
         auto it = m_sounds.find(name);
 
         // Guard clause: Sound not loaded
@@ -124,5 +129,15 @@ namespace zwodee
         // but for a simple sound effect, SDL3 allows binding multiple streams.
         // For simplicity in this demo we let the stream play.
         // In production, we'd destroy the stream after it completes (SDL_DestroyAudioStream).
+    }
+
+    void audio_manager::set_muted(bool muted)
+    {
+        m_muted = muted;
+    }
+
+    bool audio_manager::is_muted() const
+    {
+        return m_muted;
     }
 }

@@ -54,6 +54,9 @@ namespace zwodee
          */
         void play_sound(const std::string& name);
 
+        void set_muted(bool muted);
+        [[nodiscard]] bool is_muted() const;
+
         /**
          * @brief Loads a sound effect from a WAV file.
          */
@@ -62,5 +65,6 @@ namespace zwodee
     private:
         SDL_AudioDeviceID m_device_id = 0;
         std::unordered_map<std::string, sound_effect*> m_sounds;
+        bool m_muted = false;
     };
 }

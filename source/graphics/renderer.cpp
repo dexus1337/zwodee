@@ -2,6 +2,7 @@
 #include "graphics/window.hpp"
 #include "graphics/texture.hpp"
 #include "graphics/dds-format.hpp"
+#include "graphics/font.hpp"
 
 #include <SDL3/SDL.h>
 #include <stdexcept>
@@ -172,5 +173,62 @@ namespace zwodee
     SDL_Renderer* renderer::get_raw_renderer() const
     {
         return m_sdl_renderer;
+    }
+
+    void renderer::draw_text(const font& f, const std::string& text, float x, float y, float scale, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+    {
+        const texture* font_tex = f.get_texture();
+        if (!font_tex)
+        {
+            return;
+        }
+
+        SDL_Texture* raw_tex = font_tex->get_raw_texture();
+        if (!raw_tex)
+        {
+            return;
+        }
+
+        // Apply color and alpha modulation
+        SDL_SetTextureColorMod(raw_tex, r, g, b);
+        SDL_SetTextureAlphaMod(raw_tex, a);
+
+        float current_x = x;
+        float current_y = y;
+
+        for (char c : text)
+        {
+            if (c == '\n')
+            {
+                current_x = x;
+                current_y += f.get_font_size() * scale;
+                continue;
+            }
+
+            const glyph_info& glyph = f.get_glyph(c);
+
+            // Source rect from font atlas
+            float src_x = static_cast<float>(glyph.x0);
+            float src_y = static_cast<float>(glyph.y0);
+            float src_w = static_cast<float>(glyph.x1 - glyph.x0);
+            float src_h = static_cast<float>(glyph.y1 - glyph.y0);
+
+            // Dest rect on screen
+            float dest_x = current_x + glyph.xoff * scale;
+            float dest_y = current_y + glyph.yoff * scale;
+            float dest_w = (glyph.xoff2 - glyph.xoff) * scale;
+            float dest_h = (glyph.yoff2 - glyph.yoff) * scale;
+
+            SDL_FRect src_rect = { src_x, src_y, src_w, src_h };
+            SDL_FRect dest_rect = { dest_x, dest_y, dest_w, dest_h };
+
+            SDL_RenderTexture(m_sdl_renderer, raw_tex, &src_rect, &dest_rect);
+
+            current_x += glyph.xadvance * scale;
+        }
+
+        // Reset texture color/alpha modulation back to default white/fully opaque
+        SDL_SetTextureColorMod(raw_tex, 255, 255, 255);
+        SDL_SetTextureAlphaMod(raw_tex, 255);
     }
 }

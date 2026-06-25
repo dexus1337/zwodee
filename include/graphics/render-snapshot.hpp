@@ -33,6 +33,12 @@ namespace zwodee
         bool flip_horizontal = false;
         bool flip_vertical = false;
         uint8_t color_mod = 255;
+        uint8_t r = 255;
+        uint8_t g = 255;
+        uint8_t b = 255;
+        uint8_t a = 255;
+        bool is_ui = false;
+        bool is_blur = false;
     };
 
     using render_snapshot = std::vector<render_node>;

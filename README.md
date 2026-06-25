@@ -8,8 +8,12 @@ Zwodee is a high-performance, modular 2D game engine built in C++23, using SDL3 
 
 - **Fixed-Timestep Simulation**: Runs a decoupled simulation thread at a fixed tick rate of **128Hz** for deterministic physics and logic.
 - **Render Interpolation**: Decoupled rendering loop calculates interpolation alpha values to smooth out frame rate variations.
-- **Unified AABB Collision Engine**: Bounding box collisions implemented directly in the base `game_object` class, allowing static grid tiles and dynamic entities (players, enemies, projectiles) to share a clean collision interface.
+- **High-Precision Hybrid FPS Limiter**: Accurate frame rate capping supporting VSync, Unlocked, and custom limits (60, 144, 240, 360, 480 FPS) using hardware performance counters with sleep-and-busy-wait hybrid precision.
+- **Oversampled Font Engine**: High-fidelity TrueType Font (TTF) rendering using oversampled glyph rasterization to ensure sharp, crisp text at any resolution.
+- **Unified AABB Collision Engine**: Bounding box collisions implemented directly in the base `game_object` class, allowing static grid tiles and dynamic entities to share a clean collision interface.
 - **Double-Buffered Frame Snapshots**: Lock-free rendering pipeline using atomic swap buffers for frame data synchronization between simulation and render threads.
+- **UI Render Overlays & Screen Blur**: Rendering support for semi-transparent UI overlays and hardware-accelerated screen blur filters.
+- **Audio Control System**: Dedicated `audio_manager` supporting multi-channel sound effect playback, cache-efficient preloading, and real-time mute controls.
 - **Level & State Management**: Modular level interface supporting static tile levels (`tile_level`), dynamic entity instantiation, and runtime background stretching.
 - **DDS Texture Support**: Direct-to-GPU compressed DirectDraw Surface (DDS) loading alongside standard BMP textures.
 

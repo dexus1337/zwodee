@@ -19,6 +19,8 @@
 #include "graphics/render-snapshot.hpp"
 #include "core/input.hpp"
 
+struct SDL_Texture;
+
 namespace zwodee
 {
     class window;
@@ -69,6 +71,20 @@ namespace zwodee
          */
         [[nodiscard]] uint64_t get_current_tick() const;
 
+        enum class fps_limit
+        {
+            fps_60,
+            fps_144,
+            fps_240,
+            fps_360,
+            fps_480,
+            unlocked,
+            vsync
+        };
+
+        void set_fps_limit(fps_limit limit);
+        [[nodiscard]] fps_limit get_fps_limit() const;
+
     private:
         /**
          * @brief Runs the 128Hz simulation thread logic.
@@ -82,6 +98,7 @@ namespace zwodee
 
         std::atomic<bool> m_running = false;
         std::atomic<uint64_t> m_current_tick = 0;
+        std::atomic<fps_limit> m_fps_limit{fps_limit::vsync};
 
         // Multithreading sync structures
         std::thread m_simulation_thread;
@@ -98,5 +115,8 @@ namespace zwodee
         std::unique_ptr<renderer> m_renderer;
         std::unique_ptr<audio_manager> m_audio_manager;
         std::unique_ptr<level_manager> m_level_manager;
+        struct SDL_Texture* m_blur_target = nullptr;
+        int m_blur_w = 0;
+        int m_blur_h = 0;
     };
 }

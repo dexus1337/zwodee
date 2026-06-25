@@ -1,6 +1,7 @@
 #include "graphics/window.hpp"
 #include <SDL3/SDL.h>
 #include <stdexcept>
+#include <cmath>
 
 namespace zwodee
 {
@@ -53,13 +54,13 @@ namespace zwodee
     {
         int w = 0, h = 0;
         SDL_GetWindowSize(m_sdl_window, &w, &h);
-        return static_cast<int>(static_cast<float>(w) / get_scale_factor());
+        return static_cast<int>(std::ceil(static_cast<float>(w) / get_scale_factor()));
     }
 
     int window::get_height() const
     {
         int w = 0, h = 0;
         SDL_GetWindowSize(m_sdl_window, &w, &h);
-        return static_cast<int>(static_cast<float>(h) / get_scale_factor());
+        return static_cast<int>(std::ceil(static_cast<float>(h) / get_scale_factor()));
     }
 }
