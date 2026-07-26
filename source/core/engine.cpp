@@ -484,6 +484,10 @@ namespace zwodee
                             SDL_SetWindowFullscreen(m_window->get_raw_window(), true);
                         }
                     }
+                    else
+                    {
+                        mask = input_state::action_1;
+                    }
                     break;
                 case SDLK_UP:
                 case SDLK_W:
