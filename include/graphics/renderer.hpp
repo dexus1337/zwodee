@@ -90,7 +90,7 @@ namespace zwodee
         /**
          * @brief Gets the raw SDL_Renderer pointer.
          */
-        [[nodiscard]] SDL_Renderer* get_raw_renderer() const;
+        SDL_Renderer* get_raw_renderer() const;
 
     private:
         SDL_Renderer* m_sdl_renderer = nullptr;

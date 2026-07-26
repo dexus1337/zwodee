@@ -40,22 +40,22 @@ namespace zwodee
         /**
          * @brief Gets the raw SDL_Window pointer.
          */
-        [[nodiscard]] SDL_Window* get_raw_window() const;
+        SDL_Window* get_raw_window() const;
 
         /**
          * @brief Gets dynamic pixel-art scale factor based on window height.
          */
-        [[nodiscard]] float get_scale_factor() const;
+        float get_scale_factor() const;
 
         /**
          * @brief Gets window width in pixels.
          */
-        [[nodiscard]] int get_width() const;
+        int get_width() const;
 
         /**
          * @brief Gets window height in pixels.
          */
-        [[nodiscard]] int get_height() const;
+        int get_height() const;
 
     private:
         SDL_Window* m_sdl_window = nullptr;

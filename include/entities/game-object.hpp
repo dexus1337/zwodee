@@ -67,11 +67,11 @@ namespace zwodee
         virtual void deserialize(const std::vector<uint8_t>& buffer, size_t& offset);
 
         // Getters and setters
-        [[nodiscard]] uint32_t get_network_id() const;
-        [[nodiscard]] float get_x() const;
-        [[nodiscard]] float get_y() const;
-        [[nodiscard]] float get_width() const;
-        [[nodiscard]] float get_height() const;
+        uint32_t get_network_id() const;
+        float get_x() const;
+        float get_y() const;
+        float get_width() const;
+        float get_height() const;
 
         void set_position(float x, float y);
 
@@ -85,14 +85,14 @@ namespace zwodee
         void set_size(float width, float height);
 
         // Collision API
-        [[nodiscard]] bool is_collidable() const;
+        bool is_collidable() const;
         void set_collidable(bool collidable);
-        [[nodiscard]] float get_collision_offset_x() const;
-        [[nodiscard]] float get_collision_offset_y() const;
-        [[nodiscard]] float get_collision_width() const;
-        [[nodiscard]] float get_collision_height() const;
+        float get_collision_offset_x() const;
+        float get_collision_offset_y() const;
+        float get_collision_width() const;
+        float get_collision_height() const;
         void set_collision_box(float offset_x, float offset_y, float width, float height);
-        [[nodiscard]] bool collides_with(const game_object& other) const;
+        bool collides_with(const game_object& other) const;
         virtual void on_collision(game_object& other);
 
     protected:

@@ -40,7 +40,7 @@ namespace zwodee
         /**
          * @brief Gets the current frame index.
          */
-        [[nodiscard]] int get_current_frame() const;
+        int get_current_frame() const;
 
         /**
          * @brief Set animation attributes.

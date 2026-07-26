@@ -39,7 +39,7 @@ namespace zwodee
         void set_target(float tx, float ty);
 
         // Getters and setters
-        [[nodiscard]] ai_state get_state() const;
+        ai_state get_state() const;
         void set_state(ai_state st);
 
     private:

@@ -42,13 +42,14 @@ namespace zwodee
         void add_entity(std::unique_ptr<entity> ent);
         void set_background_texture(const texture* tex);
         void clear_level();
+        void resize(uint32_t width, uint32_t height);
 
         // Getters
-        [[nodiscard]] uint32_t get_width() const;
-        [[nodiscard]] uint32_t get_height() const;
-        [[nodiscard]] const std::vector<std::unique_ptr<static_object>>& get_static_objects() const;
-        [[nodiscard]] const std::vector<std::unique_ptr<entity>>& get_entities() const;
-        [[nodiscard]] const texture* get_background_texture() const;
+        uint32_t get_width() const;
+        uint32_t get_height() const;
+        const std::vector<std::unique_ptr<static_object>>& get_static_objects() const;
+        const std::vector<std::unique_ptr<entity>>& get_entities() const;
+        const texture* get_background_texture() const;
 
     private:
         uint32_t m_width = 0;

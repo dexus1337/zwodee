@@ -61,15 +61,15 @@ namespace zwodee
         void stop();
 
         // System accessors
-        [[nodiscard]] window& get_window();
-        [[nodiscard]] renderer& get_renderer();
-        [[nodiscard]] audio_manager& get_audio_manager();
-        [[nodiscard]] level_manager& get_level_manager();
+        window& get_window();
+        renderer& get_renderer();
+        audio_manager& get_audio_manager();
+        level_manager& get_level_manager();
 
         /**
          * @brief Gets current simulated tick index.
          */
-        [[nodiscard]] uint64_t get_current_tick() const;
+        uint64_t get_current_tick() const;
 
         enum class fps_limit
         {
@@ -83,7 +83,7 @@ namespace zwodee
         };
 
         void set_fps_limit(fps_limit limit);
-        [[nodiscard]] fps_limit get_fps_limit() const;
+        fps_limit get_fps_limit() const;
 
     private:
         /**

@@ -337,11 +337,11 @@ namespace zwodee
                     // Busy-wait remainder for high precision
                     while (SDL_GetTicksNS() - frame_start < target_ns)
                     {
-#if defined(_MSC_VER)
+                        #if defined(_MSC_VER)
                         __nop();
-#else
+                        #else
                         asm volatile("nop");
-#endif
+                        #endif
                     }
                 }
             }

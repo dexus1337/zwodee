@@ -26,6 +26,7 @@ namespace zwodee
         uint32_t height;        // Map height in tiles
         uint32_t tile_count;    // Total tiles (width * height)
         uint32_t entity_count;  // Total entities stored in the level
+        int32_t target_score;   // Custom field (-1 means auto-calculate)
     };
 
     /**

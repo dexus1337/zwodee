@@ -55,7 +55,7 @@ namespace zwodee
         void play_sound(const std::string& name);
 
         void set_muted(bool muted);
-        [[nodiscard]] bool is_muted() const;
+        bool is_muted() const;
 
         /**
          * @brief Loads a sound effect from a WAV file.

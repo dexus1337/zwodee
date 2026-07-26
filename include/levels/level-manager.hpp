@@ -62,12 +62,12 @@ namespace zwodee
         /**
          * @brief Captured visual snapshot of the active level.
          */
-        [[nodiscard]] render_snapshot get_active_level_snapshot(int display_w, int display_h) const;
+        render_snapshot get_active_level_snapshot(int display_w, int display_h) const;
 
         /**
          * @brief Gets the active level name.
          */
-        [[nodiscard]] std::string get_active_level_name() const;
+        std::string get_active_level_name() const;
 
     private:
         std::unordered_map<std::string, std::unique_ptr<level>> m_levels;

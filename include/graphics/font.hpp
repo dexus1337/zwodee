@@ -36,10 +36,10 @@ namespace zwodee
         font(const font&) = delete;
         font& operator=(const font&) = delete;
 
-        [[nodiscard]] const texture* get_texture() const;
-        [[nodiscard]] const glyph_info& get_glyph(char c) const;
-        [[nodiscard]] float get_font_size() const;
-        [[nodiscard]] std::vector<render_node> get_text_nodes(const std::string& text, float x, float y, float scale = 1.0f, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255, uint8_t a = 255) const;
+        const texture* get_texture() const;
+        const glyph_info& get_glyph(char c) const;
+        float get_font_size() const;
+        std::vector<render_node> get_text_nodes(const std::string& text, float x, float y, float scale = 1.0f, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255, uint8_t a = 255) const;
 
     private:
         std::unique_ptr<texture> m_atlas_texture;

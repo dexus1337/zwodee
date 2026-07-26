@@ -35,7 +35,7 @@ namespace zwodee
         /**
          * @brief Gets current speed.
          */
-        [[nodiscard]] float get_speed() const;
+        float get_speed() const;
 
         /**
          * @brief Sets movement speed.

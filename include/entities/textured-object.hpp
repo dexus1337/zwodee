@@ -44,7 +44,7 @@ namespace zwodee
         /**
          * @brief Gets the current texture.
          */
-        [[nodiscard]] const texture* get_texture() const;
+        const texture* get_texture() const;
 
         /**
          * @brief Sets whether the texture should render horizontally flipped.
@@ -54,7 +54,7 @@ namespace zwodee
         /**
          * @brief Gets whether the texture is rendered horizontally flipped.
          */
-        [[nodiscard]] bool get_flip_horizontal() const;
+        bool get_flip_horizontal() const;
 
     protected:
         const texture* m_texture = nullptr;
