@@ -73,7 +73,7 @@ int main(int argc, char** argv)
                     uint32_t gid = obj.value("gid", 0);
 
                     // Support Tile Objects by inferring type from local tile ID
-                    if (type.empty() && gid > 0)
+                    if (gid > 0)
                     {
                         uint32_t clean_gid = gid & 0x1FFFFFFF; // Clear Tiled flip flags
                         
@@ -96,41 +96,28 @@ int main(int argc, char** argv)
                             tile_id = clean_gid - 1;
                         }
 
-                        switch (tile_id)
+                        // Simply pass the tile_id as the entity's type_id
+                        ent.type_id = tile_id;
+                    }
+                    else if (!type.empty())
+                    {
+                        // Fallback for shape objects if someone specifies type_id directly
+                        if (obj.contains("properties") && obj["properties"].is_array())
                         {
-                            case 2: type = "player"; break;
-                            case 3: type = "mummy"; break;
-                            case 4: type = "soldier"; break;
-                            case 5: type = "vampire"; break;
-                            case 6: type = "dragon"; break;
-                            case 7: type = "stone"; break;
-                            case 8: type = "diamond"; break;
-                            case 9: type = "gold_coin"; break;
-                            case 10: type = "lamp"; break;
-                            case 11: type = "garlic"; break;
-                            case 12: type = "onion"; break;
-                            case 13: type = "pickaxe"; break;
-                            case 14: type = "exit_door"; break;
+                            for (const auto& prop : obj["properties"])
+                            {
+                                if (prop.value("name", "") == "type_id")
+                                {
+                                    ent.type_id = prop.value("value", 0);
+                                    break;
+                                }
+                            }
                         }
                     }
-
-                    if (type == "player") ent.type_id = 1;
-                    else if (type == "mummy") ent.type_id = 10;
-                    else if (type == "soldier") ent.type_id = 11;
-                    else if (type == "vampire") ent.type_id = 12;
-                    else if (type == "dragon") ent.type_id = 13;
-                    else if (type == "stone") ent.type_id = 20;
-                    else if (type == "diamond") ent.type_id = 21;
-                    else if (type == "gold_coin") ent.type_id = 22;
-                    else if (type == "lamp") ent.type_id = 23;
-                    else if (type == "garlic") ent.type_id = 24;
-                    else if (type == "onion") ent.type_id = 25;
-                    else if (type == "pickaxe") ent.type_id = 26;
-                    else if (type == "exit_door") ent.type_id = 27;
-                    else if (type == "enemy") ent.type_id = 2; // default AI
-                    else
+                    
+                    if (ent.type_id == 0)
                     {
-                        std::cerr << "Warning: Unknown entity type ignored: " << type << "\n";
+                        std::cerr << "Warning: Entity ignored, no valid tile ID or type_id property found.\n";
                         continue;
                     }
 

@@ -455,6 +455,62 @@ namespace zwodee
                 continue;
             }
 
+            // Console toggle
+            if (event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_F1 && event.key.repeat == 0)
+            {
+                std::lock_guard<std::mutex> lock(m_console_mutex);
+                m_console_active = !m_console_active;
+                if (m_console_active)
+                {
+                    SDL_StartTextInput(m_window->get_raw_window());
+                }
+                else
+                {
+                    SDL_StopTextInput(m_window->get_raw_window());
+                    m_console_buffer.clear();
+                }
+                current_input.buttons = 0; // Clear inputs
+                continue;
+            }
+
+            // Console input handling
+            bool skip_input = false;
+            {
+                std::lock_guard<std::mutex> lock(m_console_mutex);
+                if (m_console_active)
+                {
+                    skip_input = true;
+                    if (event.type == SDL_EVENT_TEXT_INPUT)
+                    {
+                        if (event.text.text[0] != '`' && event.text.text[0] != '~') // Prevent tilde from entering buffer
+                        {
+                            m_console_buffer += event.text.text;
+                        }
+                    }
+                    else if (event.type == SDL_EVENT_KEY_DOWN)
+                    {
+                        if (event.key.key == SDLK_BACKSPACE && !m_console_buffer.empty())
+                        {
+                            m_console_buffer.pop_back();
+                        }
+                        else if (event.key.key == SDLK_RETURN || event.key.key == SDLK_KP_ENTER)
+                        {
+                            m_pending_commands.push_back(m_console_buffer);
+                            m_console_buffer.clear();
+                            m_console_active = false;
+                            SDL_StopTextInput(m_window->get_raw_window());
+                        }
+                    }
+                }
+            }
+
+            if (skip_input)
+            {
+                // Force all buttons off while typing except quit
+                current_input.buttons &= input_state::quit;
+                continue;
+            }
+
             // Guard clause: Ignore non-key events
             if (event.type != SDL_EVENT_KEY_DOWN && event.type != SDL_EVENT_KEY_UP)
             {
@@ -534,5 +590,26 @@ namespace zwodee
     engine::fps_limit engine::get_fps_limit() const
     {
         return m_fps_limit;
+    }
+
+    bool engine::is_console_active() const
+    {
+        std::lock_guard<std::mutex> lock(m_console_mutex);
+        return m_console_active;
+    }
+
+    std::string engine::get_console_buffer() const
+    {
+        std::lock_guard<std::mutex> lock(m_console_mutex);
+        return m_console_buffer;
+    }
+
+    bool engine::pop_console_command(std::string& out_cmd)
+    {
+        std::lock_guard<std::mutex> lock(m_console_mutex);
+        if (m_pending_commands.empty()) return false;
+        out_cmd = m_pending_commands.front();
+        m_pending_commands.erase(m_pending_commands.begin());
+        return true;
     }
 }

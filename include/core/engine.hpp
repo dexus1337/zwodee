@@ -85,6 +85,10 @@ namespace zwodee
         void set_fps_limit(fps_limit limit);
         fps_limit get_fps_limit() const;
 
+        bool is_console_active() const;
+        std::string get_console_buffer() const;
+        bool pop_console_command(std::string& out_cmd);
+
     private:
         /**
          * @brief Runs the 128Hz simulation thread logic.
@@ -99,6 +103,12 @@ namespace zwodee
         std::atomic<bool> m_running = false;
         std::atomic<uint64_t> m_current_tick = 0;
         std::atomic<fps_limit> m_fps_limit{fps_limit::vsync};
+
+        // Console state
+        bool m_console_active = false;
+        std::string m_console_buffer;
+        std::vector<std::string> m_pending_commands;
+        mutable std::mutex m_console_mutex;
 
         // Multithreading sync structures
         std::thread m_simulation_thread;
