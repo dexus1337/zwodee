@@ -40,194 +40,204 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    // Read map dimensions
-    uint32_t width = root.value("width", 0);
-    uint32_t height = root.value("height", 0);
+    try {
+        // Read map dimensions
+        uint32_t width = root.value("width", 0);
+        uint32_t height = root.value("height", 0);
 
-    // Guard clause: Verify dimensions
-    if (width == 0 || height == 0)
-    {
-        std::cerr << "Error: Invalid map dimensions (width and height must be > 0)\n";
-        return 1;
-    }
-
-    std::vector<uint16_t> tiles;
-    std::vector<zwodee::binary_entity> bin_entities;
-
-    if (root.contains("layers") && root["layers"].is_array())
-    {
-        // Tiled format
-        for (const auto& layer : root["layers"])
+        // Guard clause: Verify dimensions
+        if (width == 0 || height == 0)
         {
-            std::string layer_type = layer.value("type", "");
-            if (layer_type == "tilelayer" && tiles.empty())
-            {
-                tiles = layer.value("data", std::vector<uint16_t>());
-            }
-            else if (layer_type == "objectgroup" && layer.contains("objects") && layer["objects"].is_array())
-            {
-                for (const auto& obj : layer["objects"])
-                {
-                    zwodee::binary_entity ent;
-                    std::string type = obj.value("type", "");
-                    uint32_t gid = obj.value("gid", 0);
+            std::cout << "Error: Invalid map dimensions (width and height must be > 0)\n";
+            return 1;
+        }
 
-                    // Support Tile Objects by inferring type from local tile ID
-                    if (gid > 0)
+        std::vector<uint32_t> tiles_32;
+        std::vector<uint16_t> tiles;
+        std::vector<zwodee::binary_entity> bin_entities;
+
+        if (root.contains("layers") && root["layers"].is_array())
+        {
+            // Tiled format
+            for (const auto& layer : root["layers"])
+            {
+                std::string layer_type = layer.value("type", "");
+                if (layer_type == "tilelayer" && tiles.empty())
+                {
+                    tiles_32 = layer.value("data", std::vector<uint32_t>());
+                    for (auto t : tiles_32) tiles.push_back(static_cast<uint16_t>(t & 0xFFFF));
+                }
+                else if (layer_type == "objectgroup" && layer.contains("objects") && layer["objects"].is_array())
+                {
+                    for (const auto& obj : layer["objects"])
                     {
-                        uint32_t clean_gid = gid & 0x1FFFFFFF; // Clear Tiled flip flags
-                        
-                        uint32_t tile_id = 0;
-                        if (root.contains("tilesets"))
+                        zwodee::binary_entity ent = {};
+                        std::string type = obj.value("type", "");
+                        uint32_t gid = obj.value("gid", 0);
+
+                        // Support Tile Objects by inferring type from local tile ID
+                        if (gid > 0)
                         {
-                            uint32_t best_firstgid = 1;
-                            for (const auto& ts : root["tilesets"])
+                            uint32_t clean_gid = gid & 0x1FFFFFFF; // Clear Tiled flip flags
+                            
+                            uint32_t tile_id = 0;
+                            if (root.contains("tilesets"))
                             {
-                                uint32_t fg = ts.value("firstgid", 1);
-                                if (fg <= clean_gid && fg > best_firstgid)
+                                uint32_t best_firstgid = 1;
+                                for (const auto& ts : root["tilesets"])
                                 {
-                                    best_firstgid = fg;
+                                    uint32_t fg = ts.value("firstgid", 1);
+                                    if (fg <= clean_gid && fg > best_firstgid)
+                                    {
+                                        best_firstgid = fg;
+                                    }
+                                }
+                                tile_id = clean_gid - best_firstgid;
+                            }
+                            else
+                            {
+                                tile_id = clean_gid - 1;
+                            }
+
+                            // Simply pass the tile_id as the entity's type_id
+                            ent.type_id = tile_id;
+                        }
+                        else if (!type.empty())
+                        {
+                            // Fallback for shape objects if someone specifies type_id directly
+                            if (obj.contains("properties") && obj["properties"].is_array())
+                            {
+                                for (const auto& prop : obj["properties"])
+                                {
+                                    if (prop.value("name", "") == "type_id")
+                                    {
+                                        ent.type_id = prop.value("value", 0);
+                                        break;
+                                    }
                                 }
                             }
-                            tile_id = clean_gid - best_firstgid;
                         }
-                        else
+                        
+                        if (ent.type_id == 0)
                         {
-                            tile_id = clean_gid - 1;
+                            std::cout << "Warning: Entity ignored, no valid tile ID or type_id property found.\n";
+                            continue;
                         }
 
-                        // Simply pass the tile_id as the entity's type_id
-                        ent.type_id = tile_id;
-                    }
-                    else if (!type.empty())
-                    {
-                        // Fallback for shape objects if someone specifies type_id directly
+                        ent.x = obj.value("x", 0.0f);
+                        ent.y = obj.value("y", 0.0f);
+
+                        // Tile objects in Tiled are anchored at the bottom-left. Adjust Y up by height.
+                        // Tile objects in Tiled are anchored at the bottom-left. Adjust Y up by height.
+                        if (gid > 0)
+                        {
+                            ent.y -= obj.value("height", 32.0f);
+                        }
+                        ent.health = 100;
+
                         if (obj.contains("properties") && obj["properties"].is_array())
                         {
                             for (const auto& prop : obj["properties"])
                             {
-                                if (prop.value("name", "") == "type_id")
+                                if (prop.value("name", "") == "health")
                                 {
-                                    ent.type_id = prop.value("value", 0);
+                                    ent.health = prop.value("value", 100);
                                     break;
                                 }
                             }
                         }
+                        bin_entities.push_back(ent);
                     }
-                    
-                    if (ent.type_id == 0)
+                }
+            }
+        }
+        else
+        {
+            // Old custom format
+            tiles = root.value("tiles", std::vector<uint16_t>());
+            
+            if (root.contains("entities") && root["entities"].is_array())
+            {
+                for (const auto& item : root["entities"])
+                {
+                    zwodee::binary_entity ent = {};
+                    std::string type = item.value("type", "");
+
+                    if (type == "player") ent.type_id = 1;
+                    else if (type == "enemy") ent.type_id = 2;
+                    else
                     {
-                        std::cerr << "Warning: Entity ignored, no valid tile ID or type_id property found.\n";
+                        std::cout << "Warning: Unknown entity type ignored: " << type << "\n";
                         continue;
                     }
 
-                    ent.x = obj.value("x", 0.0f);
-                    ent.y = obj.value("y", 0.0f);
-
-                    // Tile objects in Tiled are anchored at the bottom-left. Adjust Y up by height.
-                    // Tile objects in Tiled are anchored at the bottom-left. Adjust Y up by height.
-                    if (gid > 0)
-                    {
-                        ent.y -= obj.value("height", 32.0f);
-                    }
-                    ent.health = 100;
-
-                    if (obj.contains("properties") && obj["properties"].is_array())
-                    {
-                        for (const auto& prop : obj["properties"])
-                        {
-                            if (prop.value("name", "") == "health")
-                            {
-                                ent.health = prop.value("value", 100);
-                                break;
-                            }
-                        }
-                    }
+                    ent.x = item.value("x", 0.0f);
+                    ent.y = item.value("y", 0.0f);
+                    ent.health = item.value("health", 100);
                     bin_entities.push_back(ent);
                 }
             }
         }
-    }
-    else
-    {
-        // Old custom format
-        tiles = root.value("tiles", std::vector<uint16_t>());
-        
-        if (root.contains("entities") && root["entities"].is_array())
+
+
+        // Open output file
+        std::ofstream output_file(output_path, std::ios::binary);
+
+        // Guard clause: Verify output file opens
+        if (!output_file.is_open())
         {
-            for (const auto& item : root["entities"])
+            std::cerr << "Error: Could not open output file: " << output_path << "\n";
+            return 1;
+        }
+
+        // Create binary header
+        zwodee::level_header header;
+        std::memcpy(header.magic, "ZWL\0", 4);
+        header.version = 1;
+        header.width = width;
+        header.height = height;
+        header.tile_count = width * height;
+        header.entity_count = static_cast<uint32_t>(bin_entities.size());
+        header.target_score = -1;
+
+        if (root.contains("properties") && root["properties"].is_array())
+        {
+            for (const auto& prop : root["properties"])
             {
-                zwodee::binary_entity ent;
-                std::string type = item.value("type", "");
-
-                if (type == "player") ent.type_id = 1;
-                else if (type == "enemy") ent.type_id = 2;
-                else
+                if (prop.value("name", "") == "required_coins")
                 {
-                    std::cerr << "Warning: Unknown entity type ignored: " << type << "\n";
-                    continue;
+                    header.target_score = prop.value("value", -1);
                 }
-
-                ent.x = item.value("x", 0.0f);
-                ent.y = item.value("y", 0.0f);
-                ent.health = item.value("health", 100);
-                bin_entities.push_back(ent);
             }
         }
-    }
 
+        // Write header
+        output_file.write(reinterpret_cast<const char*>(&header), sizeof(zwodee::level_header));
 
-    // Open output file
-    std::ofstream output_file(output_path, std::ios::binary);
+        // Convert and write tiles
+        std::vector<zwodee::binary_tile> bin_tiles(header.tile_count);
+        size_t tile_loop_count = std::min(tiles.size(), static_cast<size_t>(header.tile_count));
+        
+        for (size_t i = 0; i < tile_loop_count; ++i)
+        {
+            bin_tiles[i].tile_id = tiles[i];
+            bin_tiles[i].flags = (tiles[i] != 0) ? 1 : 0; // Solid if tile_id is non-zero
+        }
+        
+        output_file.write(reinterpret_cast<const char*>(bin_tiles.data()), bin_tiles.size() * sizeof(zwodee::binary_tile));
 
-    // Guard clause: Verify output file opens
-    if (!output_file.is_open())
-    {
-        std::cerr << "Error: Could not open output file: " << output_path << "\n";
+        // Write entities
+        if (!bin_entities.empty())
+        {
+            output_file.write(reinterpret_cast<const char*>(bin_entities.data()), bin_entities.size() * sizeof(zwodee::binary_entity));
+        }
+
+        std::cout << "Level compiled successfully to " << output_path << " (" 
+                  << width << "x" << height << ", " << bin_entities.size() << " entities)\n";
+    } catch (const std::exception& e) {
+        std::cerr << "Unhandled exception: " << e.what() << std::endl;
         return 1;
     }
-
-    // Create binary header
-    zwodee::level_header header;
-    std::memcpy(header.magic, "ZWL\0", 4);
-    header.version = 1;
-    header.width = width;
-    header.height = height;
-    header.tile_count = width * height;
-    header.entity_count = static_cast<uint32_t>(bin_entities.size());
-    header.target_score = -1;
-
-    if (root.contains("properties") && root["properties"].is_array())
-    {
-        for (const auto& prop : root["properties"])
-        {
-            if (prop.value("name", "") == "required_coins")
-            {
-                header.target_score = prop.value("value", -1);
-            }
-        }
-    }
-
-    // Write header
-    output_file.write(reinterpret_cast<const char*>(&header), sizeof(zwodee::level_header));
-
-    // Convert and write tiles
-    std::vector<zwodee::binary_tile> bin_tiles(header.tile_count);
-    for (size_t i = 0; i < tiles.size(); ++i)
-    {
-        bin_tiles[i].tile_id = tiles[i];
-        bin_tiles[i].flags = (tiles[i] != 0) ? 1 : 0; // Solid if tile_id is non-zero
-    }
-    output_file.write(reinterpret_cast<const char*>(bin_tiles.data()), bin_tiles.size() * sizeof(zwodee::binary_tile));
-
-    // Write entities
-    if (!bin_entities.empty())
-    {
-        output_file.write(reinterpret_cast<const char*>(bin_entities.data()), bin_entities.size() * sizeof(zwodee::binary_entity));
-    }
-
-    std::cout << "Level compiled successfully to " << output_path << " (" 
-              << width << "x" << height << ", " << bin_entities.size() << " entities)\n";
 
     return 0;
 }
