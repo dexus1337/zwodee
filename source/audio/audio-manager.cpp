@@ -86,7 +86,7 @@ namespace zwodee
 
     void audio_manager::play_sound(const std::string& name)
     {
-        if (m_muted)
+        if (m_muted || m_volume <= 0.001f)
         {
             return;
         }
@@ -116,6 +116,8 @@ namespace zwodee
             return;
         }
 
+        SDL_SetAudioStreamGain(stream, m_volume);
+
         // Bind stream to the playback device
         SDL_BindAudioStream(m_device_id, stream);
 
@@ -139,5 +141,17 @@ namespace zwodee
     bool audio_manager::is_muted() const
     {
         return m_muted;
+    }
+
+    void audio_manager::set_volume(float volume)
+    {
+        if (volume < 0.0f) volume = 0.0f;
+        if (volume > 1.0f) volume = 1.0f;
+        m_volume = volume;
+    }
+
+    float audio_manager::get_volume() const
+    {
+        return m_volume;
     }
 }

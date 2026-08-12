@@ -93,4 +93,6 @@ setup_gtest(zwodee-test)
 # Build Level Compiler Tool
 add_subdirectory(tools/level-compiler)
 add_subdirectory(tools/texture-compiler)
+# Force CMake glob refresh
+
 

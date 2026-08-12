@@ -19,6 +19,8 @@ namespace zwodee
     class ZWODEE_API animator
     {
     public:
+        animator() = default;
+
         /**
          * @brief Constructs an animator.
          * @param total_frames Number of frames in the animation sequence.

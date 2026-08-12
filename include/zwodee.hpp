@@ -29,3 +29,6 @@
 #include "levels/level-format.hpp"
 #include "levels/level-loader.hpp"
 #include "levels/tile-level.hpp"
+#include "ui/button.hpp"
+#include "ui/slider.hpp"
+#include "ui/toggle_switch.hpp"

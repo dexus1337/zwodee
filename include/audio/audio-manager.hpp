@@ -57,6 +57,9 @@ namespace zwodee
         void set_muted(bool muted);
         bool is_muted() const;
 
+        void set_volume(float volume);
+        float get_volume() const;
+
         /**
          * @brief Loads a sound effect from a WAV file.
          */
@@ -66,5 +69,6 @@ namespace zwodee
         SDL_AudioDeviceID m_device_id = 0;
         std::unordered_map<std::string, sound_effect*> m_sounds;
         bool m_muted = false;
+        float m_volume = 1.0f;
     };
 }
