@@ -34,11 +34,11 @@ namespace zwodee
 
         void add_to_snapshot(render_snapshot& snapshot, const font& f, bool selected_or_hovered) const;
 
-        float get_value() const { return m_value; }
-        void set_value(float val);
+        inline float get_value()     const { return m_value; }
+        inline float get_min_value() const { return m_min_val; }
+        inline float get_max_value() const { return m_max_val; }
 
-        float get_min_value() const { return m_min_val; }
-        float get_max_value() const { return m_max_val; }
+        inline void set_value(float val) { m_value = std::clamp(val, m_min_val, m_max_val); }
 
         float get_normalized_value() const;
         void set_normalized_value(float norm);

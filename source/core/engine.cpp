@@ -418,31 +418,6 @@ namespace zwodee
         m_running = false;
     }
 
-    window& engine::get_window()
-    {
-        return *m_window;
-    }
-
-    renderer& engine::get_renderer()
-    {
-        return *m_renderer;
-    }
-
-    audio_manager& engine::get_audio_manager()
-    {
-        return *m_audio_manager;
-    }
-
-    level_manager& engine::get_level_manager()
-    {
-        return *m_level_manager;
-    }
-
-    uint64_t engine::get_current_tick() const
-    {
-        return m_current_tick;
-    }
-
     void engine::process_events(input_state& current_input)
     {
         SDL_Event event;
@@ -580,16 +555,6 @@ namespace zwodee
                 current_input.buttons &= ~mask;
             }
         }
-    }
-
-    void engine::set_fps_limit(fps_limit limit)
-    {
-        m_fps_limit = limit;
-    }
-
-    engine::fps_limit engine::get_fps_limit() const
-    {
-        return m_fps_limit;
     }
 
     bool engine::is_console_active() const

@@ -212,34 +212,4 @@ namespace zwodee
 
         m_entities.push_back(std::move(ent));
     }
-
-    uint32_t tile_level::get_width() const
-    {
-        return m_width;
-    }
-
-    uint32_t tile_level::get_height() const
-    {
-        return m_height;
-    }
-
-    const std::vector<std::unique_ptr<static_object>>& tile_level::get_static_objects() const
-    {
-        return m_tiles;
-    }
-
-    const std::vector<std::unique_ptr<entity>>& tile_level::get_entities() const
-    {
-        return m_entities;
-    }
-
-    void tile_level::set_background_texture(const texture* tex)
-    {
-        m_bg_texture = tex;
-    }
-
-    const texture* tile_level::get_background_texture() const
-    {
-        return m_bg_texture;
-    }
 }

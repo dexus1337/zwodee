@@ -36,11 +36,6 @@ namespace zwodee
         m_sdl_window = nullptr;
     }
 
-    SDL_Window* window::get_raw_window() const
-    {
-        return m_sdl_window;
-    }
-
     float window::get_scale_factor() const
     {
         int w = 0, h = 0;

@@ -38,9 +38,9 @@ namespace zwodee
          */
         void set_target(float tx, float ty);
 
-        // Getters and setters
-        ai_state get_state() const;
-        void set_state(ai_state st);
+        inline ai_state get_state() const { return m_state; }
+
+        inline void set_state(ai_state st) { m_state = st; }
 
     private:
         ai_state m_state = state_patrol;

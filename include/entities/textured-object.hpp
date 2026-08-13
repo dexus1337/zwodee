@@ -36,25 +36,11 @@ namespace zwodee
          */
         render_node get_render_node() const override;
 
-        /**
-         * @brief Sets the texture at runtime.
-         */
-        void set_texture(const texture* tex);
+        inline const texture* get_texture() const         { return m_texture; }
+        inline bool           get_flip_horizontal() const { return m_flip_horizontal; }
 
-        /**
-         * @brief Gets the current texture.
-         */
-        const texture* get_texture() const;
-
-        /**
-         * @brief Sets whether the texture should render horizontally flipped.
-         */
-        void set_flip_horizontal(bool flip);
-
-        /**
-         * @brief Gets whether the texture is rendered horizontally flipped.
-         */
-        bool get_flip_horizontal() const;
+        inline void set_texture(const texture* tex) { m_texture = tex; }
+        inline void set_flip_horizontal(bool flip)  { m_flip_horizontal = flip; }
 
     protected:
         const texture* m_texture = nullptr;

@@ -54,11 +54,11 @@ namespace zwodee
          */
         void play_sound(const std::string& name);
 
-        void set_muted(bool muted);
-        bool is_muted() const;
+        inline bool  is_muted()   const { return m_muted; }
+        inline float get_volume() const { return m_volume; }
 
+        inline void  set_muted(bool muted) { m_muted = muted; }
         void set_volume(float volume);
-        float get_volume() const;
 
         /**
          * @brief Loads a sound effect from a WAV file.

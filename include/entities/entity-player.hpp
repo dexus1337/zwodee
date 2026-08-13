@@ -22,25 +22,12 @@ namespace zwodee
     public:
         entity_player(uint32_t network_id, const texture* tex, int max_health);
 
-        /**
-         * @brief Sets the input state for the next update tick.
-         */
-        void set_input(const input_state& input);
-
-        /**
-         * @brief Override tick to process button moves.
-         */
         void tick() override;
 
-        /**
-         * @brief Gets current speed.
-         */
-        float get_speed() const;
+        inline float get_speed() const { return m_speed; }
 
-        /**
-         * @brief Sets movement speed.
-         */
-        void set_speed(float val);
+        inline void set_input(const input_state& input) { m_current_input = input; }
+        inline void set_speed(float val) { m_speed = val; }
 
     protected:
         input_state m_current_input;

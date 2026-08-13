@@ -53,11 +53,6 @@ namespace zwodee
         m_accumulated_ticks = 0;
     }
 
-    int animator::get_current_frame() const
-    {
-        return m_current_frame;
-    }
-
     void animator::set_animation(int total_frames, int ticks_per_frame, bool loops)
     {
         m_total_frames = total_frames < 1 ? 1 : total_frames;

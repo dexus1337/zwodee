@@ -68,14 +68,4 @@ namespace zwodee
         m_target_x = tx;
         m_target_y = ty;
     }
-
-    entity_ai::ai_state entity_ai::get_state() const
-    {
-        return m_state;
-    }
-
-    void entity_ai::set_state(ai_state st)
-    {
-        m_state = st;
-    }
 }

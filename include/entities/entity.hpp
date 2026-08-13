@@ -31,10 +31,9 @@ namespace zwodee
          */
         virtual void take_damage(int amount);
 
-        // Getters and setters
-        int get_health() const;
-        int get_max_health() const;
-        bool is_dead() const;
+        inline int  get_health()     const { return m_health; }
+        inline int  get_max_health() const { return m_max_health; }
+        inline bool is_dead()        const { return m_health <= 0; }
 
         void set_health(int health);
 

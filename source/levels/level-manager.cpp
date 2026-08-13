@@ -90,9 +90,4 @@ namespace zwodee
         }
         return m_active_level->get_render_snapshot(display_w, display_h);
     }
-
-    std::string level_manager::get_active_level_name() const
-    {
-        return m_active_level_name;
-    }
 }

@@ -37,10 +37,7 @@ namespace zwodee
         window(const window&) = delete;
         window& operator=(const window&) = delete;
 
-        /**
-         * @brief Gets the raw SDL_Window pointer.
-         */
-        SDL_Window* get_raw_window() const;
+        inline SDL_Window* get_raw_window() const { return m_sdl_window; }
 
         /**
          * @brief Gets dynamic pixel-art scale factor based on window height.

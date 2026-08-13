@@ -3,11 +3,6 @@
 
 namespace zwodee
 {
-    bool input_state::is_down(button_mask button) const
-    {
-        return (buttons & button) != 0;
-    }
-
     void input_state::serialize(std::vector<uint8_t>& buffer) const
     {
         // Add serialized state of buttons to buffer

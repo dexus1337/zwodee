@@ -87,10 +87,7 @@ namespace zwodee
          */
         void draw_text(const font& f, const std::string& text, float x, float y, float scale = 1.0f, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255, uint8_t a = 255);
 
-        /**
-         * @brief Gets the raw SDL_Renderer pointer.
-         */
-        SDL_Renderer* get_raw_renderer() const;
+        inline SDL_Renderer* get_raw_renderer() const { return m_sdl_renderer; }
 
     private:
         SDL_Renderer* m_sdl_renderer = nullptr;

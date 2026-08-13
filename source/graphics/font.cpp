@@ -107,11 +107,6 @@ namespace zwodee
 
     font::~font() = default;
 
-    const texture* font::get_texture() const
-    {
-        return m_atlas_texture.get();
-    }
-
     const glyph_info& font::get_glyph(char c) const
     {
         int idx = static_cast<int>(c) - 32;
@@ -121,11 +116,6 @@ namespace zwodee
             return m_glyphs[0];
         }
         return m_glyphs[idx];
-    }
-
-    float font::get_font_size() const
-    {
-        return m_font_size;
     }
 
     std::vector<render_node> font::get_text_nodes(const std::string& text, float x, float y, float scale, uint8_t r, uint8_t g, uint8_t b, uint8_t a) const

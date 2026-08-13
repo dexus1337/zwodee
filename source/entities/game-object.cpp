@@ -66,36 +66,7 @@ namespace zwodee
         offset += size;
     }
 
-    uint32_t game_object::get_network_id() const
-    {
-        return m_network_id;
-    }
 
-    float game_object::get_x() const
-    {
-        return m_x;
-    }
-
-    float game_object::get_y() const
-    {
-        return m_y;
-    }
-
-    float game_object::get_width() const
-    {
-        return m_width;
-    }
-
-    float game_object::get_height() const
-    {
-        return m_height;
-    }
-
-    void game_object::set_position(float x, float y)
-    {
-        m_x = x;
-        m_y = y;
-    }
 
     void game_object::set_grid_position(uint32_t gx, uint32_t gy)
     {
@@ -104,11 +75,7 @@ namespace zwodee
         m_y = static_cast<float>(gy) * tile_size;
     }
 
-    void game_object::set_velocity(float vx, float vy)
-    {
-        m_vx = vx;
-        m_vy = vy;
-    }
+
 
     void game_object::set_size(float width, float height)
     {
@@ -118,35 +85,7 @@ namespace zwodee
         m_collision_height = height;
     }
 
-    bool game_object::is_collidable() const
-    {
-        return m_is_collidable;
-    }
 
-    void game_object::set_collidable(bool collidable)
-    {
-        m_is_collidable = collidable;
-    }
-
-    float game_object::get_collision_offset_x() const
-    {
-        return m_collision_offset_x;
-    }
-
-    float game_object::get_collision_offset_y() const
-    {
-        return m_collision_offset_y;
-    }
-
-    float game_object::get_collision_width() const
-    {
-        return m_collision_width;
-    }
-
-    float game_object::get_collision_height() const
-    {
-        return m_collision_height;
-    }
 
     void game_object::set_collision_box(float offset_x, float offset_y, float width, float height)
     {

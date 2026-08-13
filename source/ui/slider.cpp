@@ -15,11 +15,6 @@ namespace zwodee
         return mx >= m_x && mx <= m_x + m_w && my >= m_y && my <= m_y + m_h;
     }
 
-    void slider::set_value(float val)
-    {
-        m_value = std::clamp(val, m_min_val, m_max_val);
-    }
-
     float slider::get_normalized_value() const
     {
         if (m_max_val <= m_min_val) return 0.0f;

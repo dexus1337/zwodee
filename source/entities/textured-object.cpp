@@ -32,24 +32,4 @@ namespace zwodee
         }
         return render_node{ m_x, m_y, m_width, m_height, m_texture, 0, 0, m_texture->get_width(), m_texture->get_height(), m_flip_horizontal };
     }
-
-    void textured_object::set_texture(const texture* tex)
-    {
-        m_texture = tex;
-    }
-
-    const texture* textured_object::get_texture() const
-    {
-        return m_texture;
-    }
-
-    void textured_object::set_flip_horizontal(bool flip)
-    {
-        m_flip_horizontal = flip;
-    }
-
-    bool textured_object::get_flip_horizontal() const
-    {
-        return m_flip_horizontal;
-    }
 }

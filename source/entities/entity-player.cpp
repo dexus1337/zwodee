@@ -7,11 +7,6 @@ namespace zwodee
     {
     }
 
-    void entity_player::set_input(const input_state& input)
-    {
-        m_current_input = input;
-    }
-
     void entity_player::tick()
     {
         m_vx = 0.0f;
@@ -42,15 +37,5 @@ namespace zwodee
 
         // Advance animation
         m_animator.update(1);
-    }
-
-    float entity_player::get_speed() const
-    {
-        return m_speed;
-    }
-
-    void entity_player::set_speed(float val)
-    {
-        m_speed = val;
     }
 }

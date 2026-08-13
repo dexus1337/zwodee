@@ -27,21 +27,6 @@ namespace zwodee
         }
     }
 
-    int entity::get_health() const
-    {
-        return m_health;
-    }
-
-    int entity::get_max_health() const
-    {
-        return m_max_health;
-    }
-
-    bool entity::is_dead() const
-    {
-        return m_health <= 0;
-    }
-
     void entity::set_health(int health)
     {
         m_health = health;

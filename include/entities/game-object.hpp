@@ -66,14 +66,20 @@ namespace zwodee
          */
         virtual void deserialize(const std::vector<uint8_t>& buffer, size_t& offset);
 
-        // Getters and setters
-        uint32_t get_network_id() const;
-        float get_x() const;
-        float get_y() const;
-        float get_width() const;
-        float get_height() const;
+        inline uint32_t               get_network_id()           const { return m_network_id; }
+        inline float                  get_x()                    const { return m_x; }
+        inline float                  get_y()                    const { return m_y; }
+        inline float                  get_width()                const { return m_width; }
+        inline float                  get_height()               const { return m_height; }
+        inline bool                   is_collidable()            const { return m_is_collidable; }
+        inline float                  get_collision_offset_x()   const { return m_collision_offset_x; }
+        inline float                  get_collision_offset_y()   const { return m_collision_offset_y; }
+        inline float                  get_collision_width()      const { return m_collision_width; }
+        inline float                  get_collision_height()     const { return m_collision_height; }
 
-        void set_position(float x, float y);
+        inline void                   set_position(float x, float y)       { m_x = x; m_y = y; }
+        inline void                   set_velocity(float vx, float vy)     { m_vx = vx; m_vy = vy; }
+        inline void                   set_collidable(bool collidable)      { m_is_collidable = collidable; }
 
         /**
          * @brief Positions the object using tile-grid coordinates.
@@ -81,16 +87,9 @@ namespace zwodee
          */
         void set_grid_position(uint32_t gx, uint32_t gy);
 
-        void set_velocity(float vx, float vy);
         void set_size(float width, float height);
 
         // Collision API
-        bool is_collidable() const;
-        void set_collidable(bool collidable);
-        float get_collision_offset_x() const;
-        float get_collision_offset_y() const;
-        float get_collision_width() const;
-        float get_collision_height() const;
         void set_collision_box(float offset_x, float offset_y, float width, float height);
         bool collides_with(const game_object& other) const;
         virtual void on_collision(game_object& other);

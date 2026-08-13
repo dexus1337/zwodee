@@ -133,25 +133,10 @@ namespace zwodee
         // In production, we'd destroy the stream after it completes (SDL_DestroyAudioStream).
     }
 
-    void audio_manager::set_muted(bool muted)
-    {
-        m_muted = muted;
-    }
-
-    bool audio_manager::is_muted() const
-    {
-        return m_muted;
-    }
-
     void audio_manager::set_volume(float volume)
     {
         if (volume < 0.0f) volume = 0.0f;
         if (volume > 1.0f) volume = 1.0f;
         m_volume = volume;
-    }
-
-    float audio_manager::get_volume() const
-    {
-        return m_volume;
     }
 }

@@ -36,9 +36,9 @@ namespace zwodee
         texture(const texture&) = delete;
         texture& operator=(const texture&) = delete;
 
-        SDL_Texture* get_raw_texture() const;
-        int get_width() const;
-        int get_height() const;
+        inline SDL_Texture* get_raw_texture() const { return m_sdl_texture; }
+        inline int          get_width()       const { return m_width; }
+        inline int          get_height()      const { return m_height; }
 
     private:
         SDL_Texture* m_sdl_texture = nullptr;

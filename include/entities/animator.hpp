@@ -39,10 +39,7 @@ namespace zwodee
          */
         void reset();
 
-        /**
-         * @brief Gets the current frame index.
-         */
-        int get_current_frame() const;
+        inline int get_current_frame() const { return m_current_frame; }
 
         /**
          * @brief Set animation attributes.

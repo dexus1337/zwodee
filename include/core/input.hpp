@@ -37,7 +37,7 @@ namespace zwodee
         /**
          * @brief Check if a specific button is down.
          */
-        bool is_down(button_mask button) const;
+        inline bool is_down(button_mask button) const { return (buttons & button) != 0; }
 
         /**
          * @brief Serializes the input state to a byte buffer.

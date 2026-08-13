@@ -40,16 +40,15 @@ namespace zwodee
         // Populate methods
         void set_tile(uint32_t x, uint32_t y, uint16_t tile_id, uint8_t flags, const texture* tex);
         void add_entity(std::unique_ptr<entity> ent);
-        void set_background_texture(const texture* tex);
+        inline void set_background_texture(const texture* tex) { m_bg_texture = tex; }
         void clear_level();
         void resize(uint32_t width, uint32_t height);
 
-        // Getters
-        uint32_t get_width() const;
-        uint32_t get_height() const;
-        const std::vector<std::unique_ptr<static_object>>& get_static_objects() const;
-        const std::vector<std::unique_ptr<entity>>& get_entities() const;
-        const texture* get_background_texture() const;
+        inline uint32_t get_width()  const { return m_width; }
+        inline uint32_t get_height() const { return m_height; }
+        inline const std::vector<std::unique_ptr<static_object>>& get_static_objects() const { return m_tiles; }
+        inline const std::vector<std::unique_ptr<entity>>&        get_entities()       const { return m_entities; }
+        inline const texture*                                     get_background_texture() const { return m_bg_texture; }
 
     private:
         uint32_t m_width = 0;

@@ -60,16 +60,12 @@ namespace zwodee
          */
         void stop();
 
-        // System accessors
-        window& get_window();
-        renderer& get_renderer();
-        audio_manager& get_audio_manager();
-        level_manager& get_level_manager();
+        inline window&        get_window()        { return *m_window; }
+        inline renderer&      get_renderer()      { return *m_renderer; }
+        inline audio_manager& get_audio_manager() { return *m_audio_manager; }
+        inline level_manager& get_level_manager() { return *m_level_manager; }
 
-        /**
-         * @brief Gets current simulated tick index.
-         */
-        uint64_t get_current_tick() const;
+        inline uint64_t get_current_tick() const { return m_current_tick; }
 
         enum class fps_limit
         {
@@ -82,8 +78,9 @@ namespace zwodee
             vsync
         };
 
-        void set_fps_limit(fps_limit limit);
-        fps_limit get_fps_limit() const;
+        inline fps_limit get_fps_limit() const { return m_fps_limit; }
+
+        inline void set_fps_limit(fps_limit limit) { m_fps_limit = limit; }
 
         bool is_console_active() const;
         std::string get_console_buffer() const;

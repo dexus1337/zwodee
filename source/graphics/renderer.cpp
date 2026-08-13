@@ -170,11 +170,6 @@ namespace zwodee
         }
     }
 
-    SDL_Renderer* renderer::get_raw_renderer() const
-    {
-        return m_sdl_renderer;
-    }
-
     void renderer::draw_text(const font& f, const std::string& text, float x, float y, float scale, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
     {
         const texture* font_tex = f.get_texture();

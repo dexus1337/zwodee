@@ -19,19 +19,4 @@ namespace zwodee
         SDL_DestroyTexture(m_sdl_texture);
         m_sdl_texture = nullptr;
     }
-
-    SDL_Texture* texture::get_raw_texture() const
-    {
-        return m_sdl_texture;
-    }
-
-    int texture::get_width() const
-    {
-        return m_width;
-    }
-
-    int texture::get_height() const
-    {
-        return m_height;
-    }
 }
