@@ -26,7 +26,17 @@ namespace zwodee
         uint32_t height;        // Map height in tiles
         uint32_t tile_count;    // Total tiles (width * height)
         uint32_t entity_count;  // Total entities stored in the level
-        int32_t target_score;   // Custom field (-1 means auto-calculate)
+        uint32_t property_count; // Number of binary properties stored after header
+    };
+
+    /**
+     * @struct  binary_property
+     * @brief   Represents a key-value integer property for the level.
+     */
+    struct binary_property
+    {
+        char name[32]; // Fixed-size string for simple binary I/O
+        int32_t value; // Integer value
     };
 
     /**

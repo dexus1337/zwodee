@@ -190,6 +190,43 @@ int main(int argc, char** argv)
             return 1;
         }
 
+        // Extract properties
+        std::vector<zwodee::binary_property> bin_properties;
+        if (root.contains("properties") && root["properties"].is_array())
+        {
+            std::cout << "Parsing map properties:\n";
+            for (const auto& prop : root["properties"])
+            {
+                if (prop.contains("name") && prop.contains("value"))
+                {
+                    std::string p_name = prop["name"].get<std::string>();
+                    
+                    if (prop["value"].is_number())
+                    {
+                        zwodee::binary_property bp{};
+                        std::strncpy(bp.name, p_name.c_str(), sizeof(bp.name) - 1);
+                        
+                        if (prop["value"].is_number_integer()) {
+                            bp.value = prop["value"].get<int32_t>();
+                        } else {
+                            bp.value = static_cast<int32_t>(prop["value"].get<float>());
+                        }
+                        
+                        bin_properties.push_back(bp);
+                        std::cout << "  - Found property: " << p_name << " = " << bp.value << "\n";
+                    }
+                    else
+                    {
+                        std::cout << "  - Skipped non-numeric property: " << p_name << "\n";
+                    }
+                }
+            }
+        }
+        else
+        {
+            std::cout << "No 'properties' array found in JSON.\n";
+        }
+
         // Create binary header
         zwodee::level_header header;
         std::memcpy(header.magic, "ZWL\0", 4);
@@ -198,21 +235,16 @@ int main(int argc, char** argv)
         header.height = height;
         header.tile_count = width * height;
         header.entity_count = static_cast<uint32_t>(bin_entities.size());
-        header.target_score = -1;
-
-        if (root.contains("properties") && root["properties"].is_array())
-        {
-            for (const auto& prop : root["properties"])
-            {
-                if (prop.value("name", "") == "required_coins")
-                {
-                    header.target_score = prop.value("value", -1);
-                }
-            }
-        }
+        header.property_count = static_cast<uint32_t>(bin_properties.size());
 
         // Write header
         output_file.write(reinterpret_cast<const char*>(&header), sizeof(zwodee::level_header));
+
+        // Write properties
+        if (!bin_properties.empty())
+        {
+            output_file.write(reinterpret_cast<const char*>(bin_properties.data()), bin_properties.size() * sizeof(zwodee::binary_property));
+        }
 
         // Convert and write tiles
         std::vector<zwodee::binary_tile> bin_tiles(header.tile_count);
